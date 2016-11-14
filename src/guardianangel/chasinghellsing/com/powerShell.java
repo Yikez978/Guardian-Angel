@@ -32,10 +32,14 @@ public class powerShell {
 		
 	}
 	public void enabledUsers()throws IOException{
-		File output = new File("C:/ProgramData/Guardian Angel/EnabledUsers.txt");
+		File output = new File("C:/ProgramData/Guardian Angel/junk.txt");
+		File output2 = new File("C:/ProgramData/Guardian Angel/EnabledUsers.txt");
 		output.getParentFile().mkdir();
 		output.createNewFile();
+		output2.getParentFile().mkdir();
+		output2.createNewFile();
 		PrintWriter out = new PrintWriter(output);
+		PrintWriter out2 = new PrintWriter(output2);
 		String command = "powershell.exe Import-Module ActiveDirectory; Get-ADUser -filter {enabled -ne $true} | ft samaccountname";
 		String line;
 		//Running powershell and running the commands / redirecting the input to a text file.
@@ -43,10 +47,13 @@ public class powerShell {
 		pshell1.getOutputStream().close();
 		BufferedReader usersOut = new BufferedReader(new InputStreamReader(pshell1.getInputStream()));
 		while((line = usersOut.readLine()) != null){
-			out.append(line);
-			
+			out.append(line);			
 		}
+		Textfixer fix = new Textfixer();
+		fix.removeSpacing(output,  out2);
+		
 		out.close();
+		out2.close();
 	}
 
 }
