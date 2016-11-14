@@ -26,6 +26,6 @@ public class Textfixer {
 		file.close();
 		out.close();
 	}
-	
+	 
 
 }
