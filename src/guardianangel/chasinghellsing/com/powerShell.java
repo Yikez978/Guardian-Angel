@@ -50,15 +50,16 @@ public class powerShell {
 		while((line = usersOut.readLine()) != null){
 			out.append(line);			
 		}
+		out.close();
 		Textfixer fix = new Textfixer();
 		//Importing data from the junk file and exporting to the Enabled
 		//user file.
 		fix.removeSpacing(output,  out2);
-		out.close();
 		
 		
 		
-		//out2.close();
+		
+		
 	}
 	public void disabledUsers()throws IOException{
 		File output = new File("C:/ProgramData/Guardian Angel/junkdisabledusers.txt");
@@ -69,7 +70,7 @@ public class powerShell {
 		output2.createNewFile();
 		PrintWriter out = new PrintWriter(output);
 		PrintWriter out2 = new PrintWriter(output2);
-		String command = "powershell.exe Import-Module ActiveDirectory; Get-ADUser -filter {enabled -ne $true} | ft samaccountname";
+		String command = "powershell.exe Import-Module ActiveDirectory; Search-ADAccount -AccountDisabled | ft samaccountname";
 		String line;
 		//Running powershell and running the commands / redirecting the input to a text file.
 		Process pshell1 = Runtime.getRuntime().exec(command);
@@ -78,11 +79,12 @@ public class powerShell {
 		while((line = usersOut.readLine()) != null){
 			out.append(line);			
 		}
+		out.close();
 		Textfixer fix = new Textfixer();
 		
 		fix.removeSpacing(output,  out2);
 		
-		out.close();
+		
 		;
 	}
 
