@@ -12,7 +12,7 @@ public class Threading implements Runnable {
 		while(true){
 			button_2.doClick();
 			try{
-				Thread.sleep(3000);
+				Thread.sleep(15000);
 			} catch(InterruptedException ex){
 			
 			}
