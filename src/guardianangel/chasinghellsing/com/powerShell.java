@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 
-public class powerShell {
+public class powerShell  {
 	public powerShell(){
 		
 	}
@@ -132,5 +133,19 @@ public class powerShell {
 		}
 		
 	}
+	
+	public void run(JButton name){	
+			while(true){
+				name.doClick();
+				try{
+					Thread.sleep(3000);
+				} catch(InterruptedException ex){
+				
+			}
+			
+		
+	
+		}
+		}
 
 }

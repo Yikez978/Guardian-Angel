@@ -4,8 +4,10 @@ import java.awt.Button;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -24,6 +26,7 @@ public class GAGUI {
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
 		
 		EventQueue.invokeLater(new Runnable() {
@@ -104,18 +107,47 @@ public class GAGUI {
 		frame.getContentPane().add(button_1);
 		
 		DefaultListModel<String> lulist = new DefaultListModel<String>();
-		Button button_2 = new Button("Lockedout Users");
+		JButton button_2 = new JButton("Lockedout Users");
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//for (int i = 0; i <300; i++){
+					
 				powerShell pshell = new powerShell();
-				
+				ArrayList<String> lusers = new ArrayList<String>();
+				lulist.clear();
 				try{
-					pshell.unlockUsers();
-				} catch(IOException ex){
-					System.out.println("Cannot find the file.");
+					pshell.lockedUsers();
+				} catch(IOException ex){					
+				}
+				File in = new File("C:/ProgramData/Guardian Angel/lockedusers.txt");
+				try{
+					Scanner lins = new Scanner(in);
+					BufferedReader br = new BufferedReader(new FileReader(in));     
+					if (br.readLine() == null) {
+					    lulist.addElement("No Locks");
+					    br.close(); }
+					
+					
+					while (lins.hasNext()){
+						lusers.add(lins.nextLine());
+						
+				} lins.close();
+								
+				} catch(IOException ex){ 					
+				}
+				
+				for(String s : lusers){
+					lulist.addElement(s);										
 				}
 				list_2.setModel(lulist);
-			} 
+				
+				/*try{
+					Thread.sleep(3000);
+				} catch(InterruptedException ex){
+					
+				}*/
+			}
+			
 		});
 		button_2.setBounds(0, 56, 119, 22);
 		frame.getContentPane().add(button_2);
@@ -125,7 +157,7 @@ public class GAGUI {
 		Button button_3 = new Button("Unlock");
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				powerShell pshell = new powerShell();			
+				powerShell pshell = new powerShell();
 				
 				try{
 					String user = (String) list_2.getSelectedValue();
@@ -144,7 +176,7 @@ public class GAGUI {
 				}
 			}
 		});
-		button_3.setBounds(103, 251, 70, 22);
+		button_3.setBounds(103, 222, 70, 22);
 		frame.getContentPane().add(button_3);
 		
 		JButton btnEnableAccount = new JButton("Enable Account");
@@ -154,6 +186,19 @@ public class GAGUI {
 		JButton btnDisableAcccount = new JButton("Disable Acccount");
 		btnDisableAcccount.setBounds(174, 115, 118, 22);
 		frame.getContentPane().add(btnDisableAcccount);
+		
+		JButton but = new JButton("Lockout Feed");
+		but.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Runnable thread = new Threading(button_2);
+				new Thread(thread).start();
+								
+			}
+				
+		});
+		but.setBounds(101, 250, 112, 23);
+		frame.getContentPane().add(but);
 		
 		
 		
