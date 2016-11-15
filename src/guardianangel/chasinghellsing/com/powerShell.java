@@ -2,9 +2,14 @@ package guardianangel.chasinghellsing.com;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import javax.swing.DefaultListModel;
 
 public class powerShell {
 	public powerShell(){
@@ -95,13 +100,37 @@ public class powerShell {
 		
 		;
 	}
-	
-	public void unlockUsers(String name)throws IOException{
-		String command = "powershell.exe Import-Module ActiveDirectory; Search-ADAccount -UnlockAdAccount " + name;
+	//Keeps lockedout users continually refreshing
+	public void unlockUsers()throws IOException{
+		DefaultListModel<String> lulist = new DefaultListModel<String>();
+		powerShell pshell = new powerShell();
+		ArrayList<String> lusers = new ArrayList<String>();
+		lulist.clear();
+		try{
+			pshell.lockedUsers();
+		} catch(IOException ex){					
+		}
+		File in = new File("C:/ProgramData/Guardian Angel/lockedusers.txt");
+		try{
+			Scanner lins = new Scanner(in);
+			BufferedReader br = new BufferedReader(new FileReader(in));     
+			if (br.readLine() == null) {
+			    lulist.addElement("No Locks");
+			    br.close(); }
+			
+			
+			while (lins.hasNext()){
+				lusers.add(lins.nextLine());
+				
+		} lins.close();
+						
+		} catch(IOException ex){ 					
+		}
 		
-		//Running powershell and running the commands / redirecting the input to a text file.
-		Process pshell1 = Runtime.getRuntime().exec(command);
-		pshell1.getOutputStream().close();
+		for(String s : lusers){
+			lulist.addElement(s);										
+		}
+		
 	}
 
 }

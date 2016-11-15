@@ -14,8 +14,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import java.awt.ScrollPane;
-import java.awt.Scrollbar;
 import javax.swing.JScrollPane;
 
 public class GAGUI {
@@ -110,27 +108,14 @@ public class GAGUI {
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				powerShell pshell = new powerShell();
-				ArrayList<String> lusers = new ArrayList<String>();
-				try{
-					pshell.lockedUsers();
-				} catch(IOException ex){					
-				}
-				File in = new File("C:/ProgramData/Guardian Angel/lockedusers.txt");
-				try{
-					Scanner lins = new Scanner(in);
-					
-					while (lins.hasNextLine()){
-						lusers.add(lins.nextLine());
-				} lins.close();
 				
-				
-				} catch(FileNotFoundException ex){ 					
-				}
-				for(String s : lusers){
-					lulist.addElement(s);										
+				try{
+					pshell.unlockUsers();
+				} catch(IOException ex){
+					System.out.println("Cannot find the file.");
 				}
 				list_2.setModel(lulist);
-			}
+			} 
 		});
 		button_2.setBounds(0, 56, 119, 22);
 		frame.getContentPane().add(button_2);
@@ -138,14 +123,22 @@ public class GAGUI {
 		
 		
 		Button button_3 = new Button("Unlock");
-		button_2.addActionListener(new ActionListener() {
+		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				powerShell pshell = new powerShell();
-				
+				powerShell pshell = new powerShell();			
 				
 				try{
-					String user = list_2.getSelectedValue().toString();
-					pshell.unlockUsers(user);
+					String user = (String) list_2.getSelectedValue();
+					System.out.println(user);
+					//pshell.unlockUsers(user);
+					String user2 = user;
+					System.out.println(user2);
+					String command = "powershell.exe Import-Module ActiveDirectory; Unlock-AdAccount " + user2;
+					String command1 = String.format(command, user);
+					
+					//Running powershell and running the commands / redirecting the input to a text file.
+					Process pshell1 = Runtime.getRuntime().exec(command);
+					pshell1.getOutputStream().close();
 				} catch(IOException ex){
 					
 				}
