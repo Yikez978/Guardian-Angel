@@ -13,10 +13,14 @@ public class powerShell {
 	public void lockedUsers()throws IOException{
 		//Creating the file that contains the list of locked out users and 
 		//creating a variable to run the powershell command to get these users from AD.
-		File output = new File("C:/ProgramData/Guardian Angel/lockedusers.txt");
+		File output = new File("C:/ProgramData/Guardian Angel/junklockedusers.txt");
+		File output2 = new File("C:/ProgramData/Guardian Angel/lockedusers.txt");
 		output.getParentFile().mkdir();
 		output.createNewFile();
+		output2.getParentFile().mkdir();
+		output2.createNewFile();
 		PrintWriter out = new PrintWriter(output);
+		PrintWriter out2 = new PrintWriter(output2);
 		String command = "powershell.exe Import-Module ActiveDirectory; Search-ADAccount -lockedout | ft samaccountname";
 		String line;
 		//Running powershell and running the commands / redirecting the input to a text file.
@@ -28,6 +32,10 @@ public class powerShell {
 			
 		}
 		out.close();
+		
+		Textfixer fix = new Textfixer();
+		
+		fix.removeSpacing(output,  out2);
 		
 		
 	}
@@ -86,6 +94,14 @@ public class powerShell {
 		
 		
 		;
+	}
+	
+	public void unlockUsers(String name)throws IOException{
+		String command = "powershell.exe Import-Module ActiveDirectory; Search-ADAccount -UnlockAdAccount " + name;
+		
+		//Running powershell and running the commands / redirecting the input to a text file.
+		Process pshell1 = Runtime.getRuntime().exec(command);
+		pshell1.getOutputStream().close();
 	}
 
 }
