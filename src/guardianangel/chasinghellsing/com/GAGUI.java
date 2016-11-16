@@ -161,12 +161,11 @@ public class GAGUI {
 				
 				try{
 					String user = (String) list_2.getSelectedValue();
-					System.out.println(user);
 					//pshell.unlockUsers(user);
 					String user2 = user;
-					System.out.println(user2);
 					String command = "powershell.exe Import-Module ActiveDirectory; Unlock-AdAccount " + user2;
-					String command1 = String.format(command, user);
+					//command 1 may no longer be needed.
+					//String command1 = String.format(command, user);
 					
 					//Running powershell and running the commands / redirecting the input to a text file.
 					Process pshell1 = Runtime.getRuntime().exec(command);
