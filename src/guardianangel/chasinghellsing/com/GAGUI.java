@@ -17,6 +17,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
 
 public class GAGUI {
 	
@@ -55,59 +60,51 @@ public class GAGUI {
 	 */
 	private void initialize()throws IOException {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 518, 398);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setSize(139, 273);
-		scrollPane.setLocation(303, 0);
-		JList list = new JList();
-		list.setBounds(303, 0, 139, 273);
-		frame.getContentPane().add(scrollPane);
-		scrollPane.setViewportView(list);
-		
-		JList list_2 = new JList();
-		list_2.setBounds(0, 84, 97, 189);
-		frame.getContentPane().add(list_2);
-		
-		Button button = new Button("Disabled Users");
-		button.setBounds(0, 0, 119, 22);
-		frame.getContentPane().add(button);
-		
 		DefaultListModel<String> ulist = new DefaultListModel<String>();
-		Button button_1 = new Button("Enabled Users");
-		button_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				powerShell pshell = new powerShell();
-				ArrayList<String> users = new ArrayList<String>();
-				try{
-					pshell.enabledUsers();
-				} catch(IOException ex){					
-				}
-				File in = new File("C:/ProgramData/Guardian Angel/EnabledUsers.txt");
-				try{
-					Scanner ins = new Scanner(in);
-					
-					while (ins.hasNextLine()){
-						users.add(ins.nextLine());
-				} ins.close();
-				
-				
-				} catch(FileNotFoundException ex){ 					
-				}
-				for(String s : users){
-					ulist.addElement(s);										
-				}
-				list.setModel(ulist);
-				
-			}
-		});
-		button_1.setBounds(0, 28, 119, 22);
-		frame.getContentPane().add(button_1);
 		
 		DefaultListModel<String> lulist = new DefaultListModel<String>();
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setToolTipText("Unlock, Enable, and Disable User accounts.");
+		tabbedPane.setBounds(0, 25, 510, 346);
+		frame.getContentPane().add(tabbedPane);
+		
+		JPanel panel = new JPanel();
+		tabbedPane.addTab("User Accounts", null, panel, null);
+		panel.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setBounds(0, 5, 276, 132);
+		panel.add(scrollPane);
+		JList list = new JList();
+		scrollPane.setViewportView(list);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(360, 56, 135, 218);
+		panel.add(scrollPane_1);
+		
+		JList list_2 = new JList();
+		scrollPane_1.setViewportView(list_2);
+		Button button_1 = new Button("Enabled Users");
+		button_1.setBounds(285, 5, 91, 22);
+		panel.add(button_1);
+		
+		
+		
+		Button button_3 = new Button("Unlock");
+		button_3.setBounds(403, 275, 46, 22);
+		panel.add(button_3);
+		
+		Button btnEnableAccount = new Button("Enable Account");
+		btnEnableAccount.setBounds(13, 142, 109, 23);
+		panel.add(btnEnableAccount);
 		JButton button_2 = new JButton("Lockedout Users");
+		button_2.setBounds(0, 226, -113, -23);
+		panel.add(button_2);
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//for (int i = 0; i <300; i++){
@@ -149,12 +146,37 @@ public class GAGUI {
 			}
 			
 		});
-		button_2.setBounds(0, 56, 119, 22);
-		frame.getContentPane().add(button_2);
 		
+		Button btnDisableAcccount = new Button("Disable Acccount");
+		btnDisableAcccount.setBounds(132, 142, 115, 23);
+		panel.add(btnDisableAcccount);
 		
+		Button but = new Button("Locked Users");
+		but.setBounds(261, 251, 99, 23);
+		panel.add(but);
 		
-		Button button_3 = new Button("Unlock");
+		Button button = new Button("Disabled Users");
+		button.setBounds(285, 32, 91, 22);
+		panel.add(button);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 510, 21);
+		frame.getContentPane().add(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+		
+		JMenuItem mntmClose = new JMenuItem("Close");
+		mnFile.add(mntmClose);
+		but.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Runnable thread = new Threading(button_2);
+				new Thread(thread).start();
+								
+			}
+				
+		});
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				powerShell pshell = new powerShell();
@@ -175,29 +197,34 @@ public class GAGUI {
 				}
 			}
 		});
-		button_3.setBounds(103, 222, 70, 22);
-		frame.getContentPane().add(button_3);
-		
-		JButton btnEnableAccount = new JButton("Enable Account");
-		btnEnableAccount.setBounds(174, 81, 119, 23);
-		frame.getContentPane().add(btnEnableAccount);
-		
-		JButton btnDisableAcccount = new JButton("Disable Acccount");
-		btnDisableAcccount.setBounds(174, 115, 118, 22);
-		frame.getContentPane().add(btnDisableAcccount);
-		
-		JButton but = new JButton("Lockout Feed");
-		but.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				powerShell pshell = new powerShell();
+				ArrayList<String> users = new ArrayList<String>();
+				try{
+					pshell.enabledUsers();
+				} catch(IOException ex){					
+				}
+				File in = new File("C:/ProgramData/Guardian Angel/EnabledUsers.txt");
+				try{
+					Scanner ins = new Scanner(in);
+					
+					while (ins.hasNextLine()){
+						users.add(ins.nextLine());
+				} ins.close();
 				
-				Runnable thread = new Threading(button_2);
-				new Thread(thread).start();
-								
+				
+				} catch(FileNotFoundException ex){ 					
+				}
+				for(String s : users){
+					ulist.addElement(s);										
+				}
+				list.setModel(ulist);
+				
 			}
-				
 		});
-		but.setBounds(101, 250, 112, 23);
-		frame.getContentPane().add(but);
+		
+		
 		
 		
 		
