@@ -23,7 +23,7 @@ public class Textfixer {
 		names.sort(String::compareToIgnoreCase);
 		for(Iterator<String> it = names.listIterator(); it.hasNext();){
 			String removeSam = it.next();
-			if(removeSam.equals("samaccountname")){
+			if(removeSam.equals("samaccountname") || removeSam.equals("--------------")){
 				it.remove();
 			}
 			}
