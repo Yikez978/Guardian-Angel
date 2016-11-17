@@ -11,6 +11,7 @@ public class Threading implements Runnable {
 	public void run(){
 		while(true){
 			button_2.doClick();
+			
 			try{
 				Thread.sleep(15000);
 			} catch(InterruptedException ex){

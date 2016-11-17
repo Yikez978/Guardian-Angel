@@ -20,6 +20,7 @@ public class Textfixer {
 		while (file.hasNext()){
 			names.add(file.next());			
 		}
+		//iterating through the names array to get rid of garbage from the powershell output.
 		names.sort(String::compareToIgnoreCase);
 		for(Iterator<String> it = names.listIterator(); it.hasNext();){
 			String removeSam = it.next();
