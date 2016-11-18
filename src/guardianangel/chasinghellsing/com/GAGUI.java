@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.Label;
 
 public class GAGUI {
 	
@@ -208,77 +209,38 @@ public class GAGUI {
 		
 		
 		
-		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(10, 43, 182, 267);
-		panel_1.add(scrollPane_2);
 		
-		JList list_1 = new JList();
-		list_1.setBackground(Color.LIGHT_GRAY);
-		list_1.setForeground(Color.BLACK);
-		scrollPane_2.setViewportView(list_1);
-		list_1.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent event) {
-				powerShell pshell= new powerShell();
-				
-				gmlist.clear();
-				list_3.setModel(gmlist);
-				ArrayList<String> groupMems = new ArrayList<String>();
-				ArrayList<String> groupFix = new ArrayList<String>();
-				String group = "";
-				try{
-					if(!event.getValueIsAdjusting()){
-						JList source = (JList)event.getSource();
-						String groups = source.getSelectedValuesList().toString();
-						groupFix.add(groups);
-							for(String s: groupFix){
-							s = s.replaceAll("[\\[\\]]", "");
-							group = s;
-						}
-						
-						pshell.getGroupMembers(group);
-						System.out.println(group);
-						
-					}
-				} catch(IOException ex){
-					
-				}
-				File in = new File("C:/ProgramData/Guardian Angel/GroupMembers.txt");
-				try{
-					Scanner ins = new Scanner(in);
-					
-					while (ins.hasNextLine()){
-						groupMems.add(ins.nextLine());
-				} ins.close();
-				
-				
-				} catch(FileNotFoundException ex){ 					
-				}
-				for(String s : groupMems){
-					gmlist.addElement(s);										
-				}
-				list_3.setModel(gmlist);
-			}
-		});
 		
 				
 				
 		
 		
 		JLabel lblActiveDirectoryGroups = new JLabel("Active Directory Groups");
-		lblActiveDirectoryGroups.setForeground(Color.WHITE);
 		lblActiveDirectoryGroups.setBounds(37, 22, 167, 14);
+		lblActiveDirectoryGroups.setForeground(Color.WHITE);
 		panel_1.add(lblActiveDirectoryGroups);
 		
 		
 		Button button_4 = new Button("Import Groups");
+		button_4.setBounds(198, 43, 93, 23);
 		button_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		button_4.setForeground(Color.DARK_GRAY);
-		button_4.setBounds(198, 43, 93, 23);
 		panel_1.add(button_4);
+		
+		Label label = new Label("It may take a moment for ");
+		label.setForeground(Color.RED);
+		label.setBounds(205, 242, 126, -38);
+		label.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel_1.add(label);
+		
+		Label label_1 = new Label("group members to populate.");
+		label_1.setForeground(Color.RED);
+		label_1.setFont(new Font("Dialog", Font.PLAIN, 10));
+		label_1.setBounds(198, 278, 150, -28);
+		panel_1.add(label_1);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.GRAY);
@@ -302,6 +264,71 @@ public class GAGUI {
 								
 			}
 				
+		});
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(10, 43, 182, 267);
+		panel_1.add(scrollPane_2);
+		
+		JList list_1 = new JList();
+		list_1.setBackground(Color.LIGHT_GRAY);
+		list_1.setForeground(Color.BLACK);
+		scrollPane_2.setViewportView(list_1);
+		
+		Label label_2 = new Label("Members of the group");
+		label_2.setFont(new Font("Dialog", Font.PLAIN, 12));
+		label_2.setForeground(Color.WHITE);
+		label_2.setBounds(354, 14, 150, 23);
+		panel_1.add(label_2);
+		list_1.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent event) {
+				powerShell pshell= new powerShell();
+				
+				gmlist.clear();
+				list_3.setModel(gmlist);
+				label.setBounds(205, 242, 126, 38);
+				label_1.setBounds(198, 278, 150, 28);
+				ArrayList<String> groupMems = new ArrayList<String>();
+				ArrayList<String> groupFix = new ArrayList<String>();
+				String group = "";
+				try{
+					if(!event.getValueIsAdjusting()){
+						JList source = (JList)event.getSource();
+						String groups = source.getSelectedValuesList().toString();
+						groupFix.add(groups);
+							for(String s: groupFix){
+							s = s.replaceAll("[\\[\\]]", "");
+							s = s.trim();
+							group = s;
+						}
+						
+						pshell.getGroupMembers(group);
+						System.out.println(group);
+						
+					}
+				} catch(IOException ex){
+					
+				}
+				File in = new File("C:/ProgramData/Guardian Angel/GroupMembers.txt");
+				try{
+					Scanner ins = new Scanner(in);
+					if(!(ins.hasNext()) ){
+						groupMems.add("No members.");
+					}
+					while (ins.hasNextLine()){
+						groupMems.add(ins.nextLine());
+						
+				} ins.close();
+				
+				
+				} catch(FileNotFoundException ex){ 					
+				}
+				for(String s : groupMems){
+					gmlist.addElement(s);										
+				}
+				list_3.setModel(gmlist);
+			}
 		});
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

@@ -166,9 +166,11 @@ public class powerShell{
 		PrintWriter out = new PrintWriter(output);
 		PrintWriter out2 = new PrintWriter(output2);
 		String command = "powershell.exe Import-Module ActiveDirectory; get-adgroupmember '" + group + "' |ft samaccountname";
+		String command1 = command.trim().replaceAll(" +", " ");
+		System.out.println(command1);
 		String line;
 		//Running powershell and running the commands / redirecting the input to a text file.
-		Process pshell1 = Runtime.getRuntime().exec(command);
+		Process pshell1 = Runtime.getRuntime().exec(command1);
 		pshell1.getOutputStream().close();
 		BufferedReader usersOut = new BufferedReader(new InputStreamReader(pshell1.getInputStream()));
 		while((line = usersOut.readLine()) != null){
