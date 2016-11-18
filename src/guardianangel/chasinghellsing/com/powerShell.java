@@ -12,7 +12,7 @@ import java.util.Scanner;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
-public class powerShell  {
+public class powerShell{
 	public powerShell(){
 		
 	}
@@ -136,6 +136,7 @@ public class powerShell  {
 	
 	//Get list of all groups within Active Directory
 	public void getGroups()throws IOException{
+		String line;
 		File output2 = new File("C:/ProgramData/Guardian Angel/ADGroups.txt");
 		output2.getParentFile().mkdir();
 		output2.createNewFile();
@@ -144,9 +145,39 @@ public class powerShell  {
 		//Running powershell and running the commands / redirecting the input to a text file.
 		Process pshell1 = Runtime.getRuntime().exec(command);
 		pshell1.getOutputStream().close();
+		BufferedReader usersOut = new BufferedReader(new InputStreamReader(pshell1.getInputStream()));
+		while((line = usersOut.readLine()) != null){
+			out2.println(line);			
+		}
+		out2.close();
+		
 		
 		Textfixer fix = new Textfixer();
 		fix.removeSpacing(output2,  out2);
+	}
+	
+	public void getGroupMembers(String group)throws IOException{
+		File output = new File("C:/ProgramData/Guardian Angel/junkGetGroupMembers.txt");
+		File output2 = new File("C:/ProgramData/Guardian Angel/GroupMembers.txt");
+		output.getParentFile().mkdir();
+		output.createNewFile();
+		output2.getParentFile().mkdir();
+		output2.createNewFile();
+		PrintWriter out = new PrintWriter(output);
+		PrintWriter out2 = new PrintWriter(output2);
+		String command = "powershell.exe Import-Module ActiveDirectory; get-adgroupmember '" + group + "' |ft samaccountname";
+		String line;
+		//Running powershell and running the commands / redirecting the input to a text file.
+		Process pshell1 = Runtime.getRuntime().exec(command);
+		pshell1.getOutputStream().close();
+		BufferedReader usersOut = new BufferedReader(new InputStreamReader(pshell1.getInputStream()));
+		while((line = usersOut.readLine()) != null){
+			out.println(line);			
+		}
+		out.close();
+		Textfixer fix = new Textfixer();
+		
+		fix.removeSpacing(output,  out2);
 	}
 	
 	public void run(JButton name){	

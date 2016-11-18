@@ -1,7 +1,9 @@
 package guardianangel.chasinghellsing.com;
 
 import java.awt.Button;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -15,17 +17,16 @@ import java.util.Scanner;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JPanel;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import java.awt.Color;
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Choice;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class GAGUI {
 	
@@ -76,6 +77,7 @@ public class GAGUI {
 		DefaultListModel<String> dulist = new DefaultListModel<String>();		
 		DefaultListModel<String> lulist = new DefaultListModel<String>();
 		DefaultListModel<String> glist = new DefaultListModel<String>();
+		DefaultListModel<String> gmlist = new DefaultListModel<String>();
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.LIGHT_GRAY);
@@ -105,6 +107,21 @@ public class GAGUI {
 		Button button_1 = new Button("Enabled Users");
 		button_1.setBounds(10, 173, 91, 22);
 		panel.add(button_1);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setForeground(Color.LIGHT_GRAY);
+		panel_1.setBackground(Color.DARK_GRAY);
+		panel_1.setToolTipText("AD group Management.");
+		tabbedPane.addTab("Groups", null, panel_1, null);
+		panel_1.setLayout(null);
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(354, 43, 150, 267);
+		panel_1.add(scrollPane_3);
+		
+		JList list_3 = new JList();
+		list_3.setBackground(Color.LIGHT_GRAY);
+		scrollPane_3.setViewportView(list_3);
 		
 		
 		
@@ -189,12 +206,7 @@ public class GAGUI {
 		lblEnabledDisabled.setBounds(22, 22, 254, 14);
 		panel.add(lblEnabledDisabled);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setForeground(Color.LIGHT_GRAY);
-		panel_1.setBackground(Color.DARK_GRAY);
-		panel_1.setToolTipText("AD group Management.");
-		tabbedPane.addTab("Groups", null, panel_1, null);
-		panel_1.setLayout(null);
+		
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(10, 43, 182, 267);
@@ -202,30 +214,55 @@ public class GAGUI {
 		
 		JList list_1 = new JList();
 		list_1.setBackground(Color.LIGHT_GRAY);
-		list_1.setForeground(Color.LIGHT_GRAY);
+		list_1.setForeground(Color.BLACK);
 		scrollPane_2.setViewportView(list_1);
-		//Displays all groups from startup
-		powerShell pshell = new powerShell();
-		ArrayList<String> groups = new ArrayList<String>();
-		try{
-			pshell.getGroups();
-		} catch(IOException ex){					
-		}
-		File in = new File("C:/ProgramData/Guardian Angel/ADGroups.txt");
-		try{
-			Scanner ins = new Scanner(in);
-			
-			while (ins.hasNextLine()){
-				groups.add(ins.nextLine());
-		} ins.close();
+		list_1.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent event) {
+				powerShell pshell= new powerShell();
+				
+				gmlist.clear();
+				list_3.setModel(gmlist);
+				ArrayList<String> groupMems = new ArrayList<String>();
+				ArrayList<String> groupFix = new ArrayList<String>();
+				String group = "";
+				try{
+					if(!event.getValueIsAdjusting()){
+						JList source = (JList)event.getSource();
+						String groups = source.getSelectedValuesList().toString();
+						groupFix.add(groups);
+							for(String s: groupFix){
+							s = s.replaceAll("[\\[\\]]", "");
+							group = s;
+						}
+						
+						pshell.getGroupMembers(group);
+						System.out.println(group);
+						
+					}
+				} catch(IOException ex){
+					
+				}
+				File in = new File("C:/ProgramData/Guardian Angel/GroupMembers.txt");
+				try{
+					Scanner ins = new Scanner(in);
+					
+					while (ins.hasNextLine()){
+						groupMems.add(ins.nextLine());
+				} ins.close();
+				
+				
+				} catch(FileNotFoundException ex){ 					
+				}
+				for(String s : groupMems){
+					gmlist.addElement(s);										
+				}
+				list_3.setModel(gmlist);
+			}
+		});
 		
-		
-		} catch(FileNotFoundException ex){ 					
-		}
-		for(String s : groups){
-			glist.addElement(s);										
-		}
-		list_1.setModel(ulist);
+				
+				
 		
 		
 		JLabel lblActiveDirectoryGroups = new JLabel("Active Directory Groups");
@@ -233,13 +270,15 @@ public class GAGUI {
 		lblActiveDirectoryGroups.setBounds(37, 22, 167, 14);
 		panel_1.add(lblActiveDirectoryGroups);
 		
-		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(355, 43, 150, 278);
-		panel_1.add(scrollPane_3);
 		
-		JList list_3 = new JList();
-		list_3.setBackground(Color.LIGHT_GRAY);
-		scrollPane_3.setViewportView(list_3);
+		Button button_4 = new Button("Import Groups");
+		button_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		button_4.setForeground(Color.DARK_GRAY);
+		button_4.setBounds(198, 43, 93, 23);
+		panel_1.add(button_4);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.GRAY);
@@ -252,6 +291,7 @@ public class GAGUI {
 		
 		JMenuItem mntmClose = new JMenuItem("Close");
 		mnFile.add(mntmClose);
+		
 		but.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -337,10 +377,35 @@ public class GAGUI {
 				
 			}
 		});
+		button_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+		//Displays all groups from startup
 		
+		powerShell pshell = new powerShell();
+	
+		ArrayList<String> groups = new ArrayList<String>();
+		try{
+			pshell.getGroups();
+		} 	catch(IOException ex){					
+	}
+		File in = new File("C:/ProgramData/Guardian Angel/ADGroups.txt");
+		try{
+		Scanner ins = new Scanner(in);
 		
+		while (ins.hasNextLine()){
+			groups.add(ins.nextLine());
+		} ins.close();
+	
 		
+		} catch(FileNotFoundException ex){ 					
+		}
+		for(String s : groups){
+		glist.addElement(s);										
+		}
+		list_1.setModel(glist);
 		
+		}
+		});
 		
 		
 	}
