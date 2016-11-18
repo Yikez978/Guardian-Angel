@@ -25,6 +25,7 @@ import javax.swing.JMenu;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Choice;
 
 public class GAGUI {
 	
@@ -74,6 +75,7 @@ public class GAGUI {
 		DefaultListModel<String> ulist = new DefaultListModel<String>();
 		DefaultListModel<String> dulist = new DefaultListModel<String>();		
 		DefaultListModel<String> lulist = new DefaultListModel<String>();
+		DefaultListModel<String> glist = new DefaultListModel<String>();
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.LIGHT_GRAY);
@@ -202,6 +204,29 @@ public class GAGUI {
 		list_1.setBackground(Color.LIGHT_GRAY);
 		list_1.setForeground(Color.LIGHT_GRAY);
 		scrollPane_2.setViewportView(list_1);
+		//Displays all groups from startup
+		powerShell pshell = new powerShell();
+		ArrayList<String> groups = new ArrayList<String>();
+		try{
+			pshell.getGroups();
+		} catch(IOException ex){					
+		}
+		File in = new File("C:/ProgramData/Guardian Angel/ADGroups.txt");
+		try{
+			Scanner ins = new Scanner(in);
+			
+			while (ins.hasNextLine()){
+				groups.add(ins.nextLine());
+		} ins.close();
+		
+		
+		} catch(FileNotFoundException ex){ 					
+		}
+		for(String s : groups){
+			glist.addElement(s);										
+		}
+		list_1.setModel(ulist);
+		
 		
 		JLabel lblActiveDirectoryGroups = new JLabel("Active Directory Groups");
 		lblActiveDirectoryGroups.setForeground(Color.WHITE);

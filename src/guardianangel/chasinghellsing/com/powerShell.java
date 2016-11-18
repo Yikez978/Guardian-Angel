@@ -99,7 +99,7 @@ public class powerShell  {
 		fix.removeSpacing(output,  out2);
 		
 		
-		;
+		
 	}
 	//Keeps lockedout users continually refreshing
 	public void unlockUsers()throws IOException{
@@ -132,6 +132,21 @@ public class powerShell  {
 			lulist.addElement(s);										
 		}
 		
+	}
+	
+	//Get list of all groups within Active Directory
+	public void getGroups()throws IOException{
+		File output2 = new File("C:/ProgramData/Guardian Angel/ADGroups.txt");
+		output2.getParentFile().mkdir();
+		output2.createNewFile();
+		PrintWriter out2 = new PrintWriter(output2);
+		String command = "powershell.exe Import-Module ActiveDirectory; get-adgroup -filter * |sort name | select name";
+		//Running powershell and running the commands / redirecting the input to a text file.
+		Process pshell1 = Runtime.getRuntime().exec(command);
+		pshell1.getOutputStream().close();
+		
+		Textfixer fix = new Textfixer();
+		fix.removeSpacing(output2,  out2);
 	}
 	
 	public void run(JButton name){	
