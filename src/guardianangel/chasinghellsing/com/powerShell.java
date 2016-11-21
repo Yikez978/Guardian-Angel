@@ -182,6 +182,25 @@ public class powerShell{
 		fix.removeSpacing(output,  out2);
 	}
 	
+	public void removeGroupMembers(String group, String groupMember)throws IOException{
+		File output = new File("C:/ProgramData/Guardian Angel/removeGroupMembers.txt");
+		output.getParentFile().mkdir();
+		output.createNewFile();
+		PrintWriter out = new PrintWriter(output);
+		String command = "powershell.exe Import-Module ActiveDirectory; Remove-AdGroupMember '" + group + "' " + groupMember + " -Confirm:$false" ;
+		System.out.println(command);
+		String line;
+		//Running powershell and running the commands / redirecting the input to a text file.
+		Process pshell1 = Runtime.getRuntime().exec(command);
+		pshell1.getOutputStream().close();
+		BufferedReader usersOut = new BufferedReader(new InputStreamReader(pshell1.getInputStream()));
+		while((line = usersOut.readLine()) != null){
+			out.println(line);			
+		}
+		out.close();
+	}
+	
+	
 	public void run(JButton name){	
 			while(true){
 				name.doClick();

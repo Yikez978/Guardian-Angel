@@ -28,6 +28,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.Label;
+import javax.swing.JInternalFrame;
+import java.awt.BorderLayout;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GAGUI {
 	
@@ -69,7 +75,7 @@ public class GAGUI {
 		frmGuardianAngel.getContentPane().setBackground(Color.DARK_GRAY);
 		frmGuardianAngel.setBackground(Color.DARK_GRAY);
 		frmGuardianAngel.setTitle("Guardian Angel v1.0");
-		frmGuardianAngel.setBounds(100, 100, 518, 398);
+		frmGuardianAngel.setBounds(100, 100, 786, 565);
 		frmGuardianAngel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmGuardianAngel.getContentPane().setLayout(null);
 		
@@ -83,7 +89,7 @@ public class GAGUI {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.LIGHT_GRAY);
 		tabbedPane.setToolTipText("Unlock, Enable, and Disable User accounts.");
-		tabbedPane.setBounds(0, 25, 510, 346);
+		tabbedPane.setBounds(0, 25, 770, 502);
 		frmGuardianAngel.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
@@ -99,7 +105,7 @@ public class GAGUI {
 		scrollPane.setViewportView(list);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(360, 56, 135, 218);
+		scrollPane_1.setBounds(615, 35, 135, 218);
 		panel.add(scrollPane_1);
 		
 		JList list_2 = new JList();
@@ -127,12 +133,16 @@ public class GAGUI {
 		
 		
 		Button button_3 = new Button("Unlock");
-		button_3.setBounds(403, 275, 46, 22);
+		button_3.setBounds(655, 260, 46, 22);
 		panel.add(button_3);
 		
 		Button btnEnableAccount = new Button("Enable Account");
+		btnEnableAccount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnEnableAccount.setBounds(10, 235, 99, 23);
 		btnEnableAccount.setFont(new Font("Dialog", Font.PLAIN, 9));
-		btnEnableAccount.setBounds(10, 201, 99, 23);
 		panel.add(btnEnableAccount);
 		JButton button_2 = new JButton("Lockedout Users");
 		button_2.setBounds(0, 226, -113, -23);
@@ -180,12 +190,12 @@ public class GAGUI {
 		});
 		
 		Button btnDisableAcccount = new Button("Disable Acccount");
+		btnDisableAcccount.setBounds(125, 235, 98, 23);
 		btnDisableAcccount.setFont(new Font("Dialog", Font.PLAIN, 9));
-		btnDisableAcccount.setBounds(125, 201, 98, 23);
 		panel.add(btnDisableAcccount);
 		
 		Button but = new Button("Locked Users");
-		but.setBounds(261, 251, 99, 23);
+		but.setBounds(510, 226, 99, 23);
 		panel.add(but);
 		
 		Button button = new Button("Disabled Users");
@@ -193,19 +203,23 @@ public class GAGUI {
 		panel.add(button);
 		
 		JLabel lblTheLockedOut = new JLabel("The locked out user list refreshes every 15 seconds.");
-		lblTheLockedOut.setForeground(Color.RED);
 		lblTheLockedOut.setBounds(47, 296, 301, -14);
+		lblTheLockedOut.setForeground(Color.RED);
 		panel.add(lblTheLockedOut);
 		
 		JLabel lblLockedOutUsers = new JLabel("Locked out users");
+		lblLockedOutUsers.setBounds(637, 6, 112, 14);
 		lblLockedOutUsers.setForeground(Color.WHITE);
-		lblLockedOutUsers.setBounds(383, 38, 112, 14);
 		panel.add(lblLockedOutUsers);
 		
 		JLabel lblEnabledDisabled = new JLabel("Enabled / Disabled user display");
-		lblEnabledDisabled.setForeground(Color.WHITE);
 		lblEnabledDisabled.setBounds(22, 22, 254, 14);
+		lblEnabledDisabled.setForeground(Color.WHITE);
 		panel.add(lblEnabledDisabled);
+		
+		JButton btnNewButton = new JButton("Add to group");
+		btnNewButton.setBounds(276, 34, 112, 28);
+		panel.add(btnNewButton);
 		
 		
 		
@@ -244,7 +258,7 @@ public class GAGUI {
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.GRAY);
-		menuBar.setBounds(0, 0, 510, 21);
+		menuBar.setBounds(0, 0, 770, 21);
 		frmGuardianAngel.getContentPane().add(menuBar);
 		
 		JMenu mnFile = new JMenu("File");
@@ -280,6 +294,25 @@ public class GAGUI {
 		label_2.setForeground(Color.WHITE);
 		label_2.setBounds(354, 14, 150, 23);
 		panel_1.add(label_2);
+		
+		JButton btnRemove = new JButton("Remove");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				powerShell pshell = new powerShell();
+				String group = (String) list_1.getSelectedValue();
+				String groupMember = (String) list_3.getSelectedValue();
+				group = group.trim();
+				groupMember = groupMember.trim();
+				
+				try{
+					pshell.removeGroupMembers(group, groupMember);
+				} catch(IOException ex){
+					
+				}
+			}
+		});
+		btnRemove.setBounds(258, 116, 90, 28);
+		panel_1.add(btnRemove);
 		list_1.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
@@ -435,5 +468,22 @@ public class GAGUI {
 		});
 		
 		
+	}
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
