@@ -141,7 +141,7 @@ public class GAGUI {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnEnableAccount.setBounds(10, 235, 99, 23);
+		btnEnableAccount.setBounds(20, 201, 99, 23);
 		btnEnableAccount.setFont(new Font("Dialog", Font.PLAIN, 9));
 		panel.add(btnEnableAccount);
 		JButton button_2 = new JButton("Lockedout Users");
@@ -190,7 +190,7 @@ public class GAGUI {
 		});
 		
 		Button btnDisableAcccount = new Button("Disable Acccount");
-		btnDisableAcccount.setBounds(125, 235, 98, 23);
+		btnDisableAcccount.setBounds(142, 201, 98, 23);
 		btnDisableAcccount.setFont(new Font("Dialog", Font.PLAIN, 9));
 		panel.add(btnDisableAcccount);
 		
@@ -203,7 +203,7 @@ public class GAGUI {
 		panel.add(button);
 		
 		JLabel lblTheLockedOut = new JLabel("The locked out user list refreshes every 15 seconds.");
-		lblTheLockedOut.setBounds(47, 296, 301, -14);
+		lblTheLockedOut.setBounds(270, 437, 301, -14);
 		lblTheLockedOut.setForeground(Color.RED);
 		panel.add(lblTheLockedOut);
 		
@@ -218,8 +218,29 @@ public class GAGUI {
 		panel.add(lblEnabledDisabled);
 		
 		JButton btnNewButton = new JButton("Add to group");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnNewButton.setBounds(276, 34, 112, 28);
 		panel.add(btnNewButton);
+		
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setBounds(276, 66, 118, 218);
+		panel.add(scrollPane_4);
+		
+		JList list_4 = new JList();
+		scrollPane_4.setViewportView(list_4);
+		
+		JButton btnOk = new JButton("OK");
+		btnOk.setFont(new Font("SansSerif", Font.PLAIN, 10));
+		btnOk.setBounds(278, 285, 52, 28);
+		panel.add(btnOk);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setFont(new Font("SansSerif", Font.PLAIN, 10));
+		btnCancel.setBounds(336, 284, 62, 28);
+		panel.add(btnCancel);
 		
 		
 		
@@ -274,7 +295,7 @@ public class GAGUI {
 				Runnable thread = new Threading(button_2);
 				new Thread(thread).start();
 				but.setEnabled(false);
-				lblTheLockedOut.setBounds(47, 296, 301, 14);
+				lblTheLockedOut.setBounds(270, 437, 301, 14);
 								
 			}
 				
