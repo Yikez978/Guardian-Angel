@@ -36,6 +36,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GAGUI {
+	powerShell pshell = new powerShell();
 	
 
 	private JFrame frmGuardianAngel;
@@ -151,7 +152,7 @@ public class GAGUI {
 			public void actionPerformed(ActionEvent arg0) {
 				//for (int i = 0; i <300; i++){
 					
-				powerShell pshell = new powerShell();
+				
 				ArrayList<String> lusers = new ArrayList<String>();
 				lulist.clear();
 				try{
@@ -319,7 +320,7 @@ public class GAGUI {
 		JButton btnRemove = new JButton("Remove");
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				powerShell pshell = new powerShell();
+				
 				String group = (String) list_1.getSelectedValue();
 				String groupMember = (String) list_3.getSelectedValue();
 				group = group.trim();
@@ -337,7 +338,6 @@ public class GAGUI {
 		list_1.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
-				powerShell pshell= new powerShell();
 				
 				gmlist.clear();
 				list_3.setModel(gmlist);
@@ -386,17 +386,17 @@ public class GAGUI {
 		});
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				powerShell pshell = new powerShell();
+				
 				
 				try{
 					String user = (String) list_2.getSelectedValue();
 					//pshell.unlockUsers(user);
 					String user2 = user;
-					String command = "powershell.exe Import-Module ActiveDirectory; Unlock-AdAccount " + user2;
+					String command = "shell.exe Import-Module ActiveDirectory; Unlock-AdAccount " + user2;
 					//command 1 may no longer be needed.
 					//String command1 = String.format(command, user);
 					
-					//Running powershell and running the commands / redirecting the input to a text file.
+					//Running shell and running the commands / redirecting the input to a text file.
 					Process pshell1 = Runtime.getRuntime().exec(command);
 					pshell1.getOutputStream().close();
 				} catch(IOException ex){
@@ -407,7 +407,7 @@ public class GAGUI {
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ulist.clear();
-				powerShell pshell = new powerShell();
+				
 				ArrayList<String> users = new ArrayList<String>();
 				try{
 					pshell.enabledUsers();
@@ -434,7 +434,7 @@ public class GAGUI {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dulist.clear();
-				powerShell pshell = new powerShell();
+				
 				ArrayList<String> users = new ArrayList<String>();
 				try{
 					pshell.enabledUsers();
@@ -462,7 +462,7 @@ public class GAGUI {
 			public void actionPerformed(ActionEvent arg0) {
 		//Displays all groups from startup
 		
-		powerShell pshell = new powerShell();
+		
 	
 		ArrayList<String> groups = new ArrayList<String>();
 		try{
